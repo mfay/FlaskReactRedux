@@ -1,0 +1,6 @@
+*.py[cod]
+*.egg-info/
+env/
+.vscode
+node_modules
+*.db
