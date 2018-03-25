@@ -7,7 +7,7 @@ export default class UserDisplay extends React.Component {
                     <div><strong>Employee ID</strong>: {this.props.user.employeeNumber}</div>
                     <div><strong>First Name</strong>: {this.props.user.firstName}</div>
                     <div><strong>Last Name</strong>: {this.props.user.lastName}</div>
-                    <br/>
+                    <a href="#" className="btn btn-primary" onClick={this.props.onClick}>Edit</a>
                 </div>
             );
         } else {

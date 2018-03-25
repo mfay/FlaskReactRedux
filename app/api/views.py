@@ -20,9 +20,31 @@ class EmployeeSchema(ma.ModelSchema):
 @api.route('/users')
 class UserList(Resource):
     def get(self):
-        all_employees = Employee.query.all()
+        return self.all_employees()
+
+    def post(self):
+        args = self.get_args()
+        emp = Employee.query.filter(Employee.employeeNumber==args.employeeNumber).first()
+        if not emp:
+            emp = Employee()
+        emp.firstName = args.firstName
+        emp.lastName = args.lastName
+        db.session.add(emp)
+        db.session.commit()
+        return self.all_employees()
+    
+    def all_employees(self):
+        all_employees = Employee.query.order_by(Employee.lastName).all()
         employee_schema = EmployeeSchema(many=True)
         return employee_schema.jsonify(all_employees)
+
+    def get_args(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('firstName', default='', help='First name')
+        parser.add_argument('lastName', default='', help='Last name')
+        parser.add_argument('employeeNumber', default='', help='Employee number')
+        return parser.parse_args()
+
 
 @api.route('/employees')
 class EmployeeList(Resource):

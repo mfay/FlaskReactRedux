@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import UserList from './userList.jsx';
 import UserDisplay from './userDisplay.jsx';
-import { fetchUsers } from './userActions.jsx';
+import UserEdit from './userEdit.jsx';
+import * as actions from './userActions.jsx';
 
 class Layout extends React.Component {
 
@@ -11,9 +12,9 @@ class Layout extends React.Component {
     }
 
     render() {
+        const isEditing = this.props.isEditing;
         return (
             <div>
-                <h1>Users</h1>
                 <table>
                     <thead>
                         <tr>
@@ -22,11 +23,15 @@ class Layout extends React.Component {
                     <tbody>
                         <tr>
                             <td valign="top">
-                                <UserList users={this.props.users} onClick={this.props.fetchUsers} onSelect={this.props.selectUser} />
+                                <UserList users={this.props.users} onClick={this.props.addUser} onSelect={this.props.selectUser}/>
                             </td>
                             <td width="100">&nbsp;</td>
                             <td valign="top">
-                                <UserDisplay user={this.props.selectedUser} />
+                                {isEditing ? (
+                                    <UserEdit user={this.props.selectedUser} onSave={this.props.saveUser} onCancel={this.props.cancelEditUser} />
+                                ) : (
+                                        <UserDisplay user={this.props.selectedUser} onClick={this.props.editUser} />
+                                    )}
                             </td>
                         </tr>
                     </tbody>
@@ -40,16 +45,19 @@ class Layout extends React.Component {
 const mapStateToProps = state => {
     return {
         users: state.users,
-        selectedUser: state.selectedUser
+        selectedUser: state.selectedUser,
+        isEditing: state.isEditing
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchUsers: () => dispatch(fetchUsers()),
-        selectUser: (id) => {
-            return dispatch({ type: 'SELECT_USER', payload: id });
-        }
+        fetchUsers: () => dispatch(actions.fetchUsers()),
+        selectUser: (id) => dispatch(actions.selectUser(id)),
+        editUser: () => dispatch(actions.editUser()),
+        addUser: () => dispatch(actions.addUser()),
+        cancelEditUser: () => dispatch(actions.cancelEditUser()),
+        saveUser: (user) => dispatch(actions.saveUser(user))
     }
 }
 
