@@ -3,14 +3,14 @@ import axios from 'axios';
 export function fetchUsers() {
     return {
         type: 'FETCH_USER',
-        payload: axios.get('/users')
+        payload: axios.get('/api/users')
     }
 }
 
 export function saveUser(user) {
     return {
         type: 'SAVE_USER',
-        payload: axios.post('/users', user)
+        payload: axios.post('/api/users', user)
     }
 }
 
@@ -21,9 +21,10 @@ export function selectUser(id) {
     }
 }
 
-export function editUser() {
+export function editUser(id) {
     return {
-        type: 'EDIT_USER'
+        type: 'EDIT_USER',
+        payload: id
     }
 }
 

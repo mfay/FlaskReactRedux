@@ -16,14 +16,10 @@ class Layout extends React.Component {
         return (
             <div>
                 <table>
-                    <thead>
-                        <tr>
-                        </tr>
-                    </thead>
                     <tbody>
                         <tr>
                             <td valign="top">
-                                <UserList users={this.props.users} onClick={this.props.addUser} onSelect={this.props.selectUser}/>
+                                <UserList users={this.props.users} onClick={this.props.addUser} onSelect={this.props.editUser}/>
                             </td>
                             <td width="100">&nbsp;</td>
                             <td valign="top">
@@ -54,7 +50,7 @@ const mapDispatchToProps = dispatch => {
     return {
         fetchUsers: () => dispatch(actions.fetchUsers()),
         selectUser: (id) => dispatch(actions.selectUser(id)),
-        editUser: () => dispatch(actions.editUser()),
+        editUser: (id) => dispatch(actions.editUser(id)),
         addUser: () => dispatch(actions.addUser()),
         cancelEditUser: () => dispatch(actions.cancelEditUser()),
         saveUser: (user) => dispatch(actions.saveUser(user))

@@ -1,8 +1,12 @@
 from api import api, models, db, ma
 from flask_restplus import Resource, Api, reqparse, inputs
-from api.models import Employee
+from api.models import Employee, Event
+import datetime
+import calendar
+from dateutil.parser import parse
+import json
 
-@api.route('/init')
+@api.route('/api/init')
 class HelloWorld(Resource):
     def get(self):
         db.create_all()
@@ -17,7 +21,11 @@ class EmployeeSchema(ma.ModelSchema):
     class Meta:
         model = Employee
 
-@api.route('/users')
+class EventSchema(ma.ModelSchema):
+    class Meta:
+        model = Event
+
+@api.route('/api/users')
 class UserList(Resource):
     def get(self):
         return self.all_employees()
@@ -46,21 +54,35 @@ class UserList(Resource):
         return parser.parse_args()
 
 
-@api.route('/employees')
-class EmployeeList(Resource):
+@api.route('/api/events')
+class EventList(Resource):
 
+    def post(self):
+        args = self.get_args()
+        daysinmonth = calendar.monthrange(args.year, args.month)[1]
+        startDate = datetime.date(args.year, args.month, 1)
+        endDate = datetime.date(args.year, args.month, daysinmonth)
+        all_events = Event.query.filter(Event.startDate >= startDate, Event.startDate <= endDate).all()
+        event_schema = EventSchema(many=True)
+        return event_schema.jsonify(all_events)
+    
     def get(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('email', default='', help='Filter by email address')
-        parser.add_argument('firstName', default='', help='Filter by first name')
-        parser.add_argument('lastName', default='', help='Filter by last name')
+        parser.add_argument('startDate', default='', help='Start date')
+        parser.add_argument('title', default='', help='Title')
         args = parser.parse_args()
-        all_employees = (
-            Employee.query
-            .filter(Employee.email.contains(args.email))
-            .filter(Employee.firstName.contains(args.firstName))
-            .filter(Employee.lastName.contains(args.lastName))
-            .all()
-        )
-        employee_schema = EmployeeSchema(many=True)
-        return employee_schema.jsonify(all_employees)
+        event = Event()
+        event.title = args.title
+        event.startDate = parse(args.startDate)
+        event.endDate = parse(args.startDate)
+        db.session.add(event)
+        db.session.commit()
+        return '[]'
+        
+
+    def get_args(self):
+        parser = reqparse.RequestParser()
+        today = datetime.date.today()
+        parser.add_argument('month', type=int, default=today.month, help='Month')
+        parser.add_argument('year', type=int, default=today.year, help='Year')
+        return parser.parse_args()

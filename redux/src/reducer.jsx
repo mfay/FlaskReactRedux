@@ -18,10 +18,11 @@ export default function reducer(state={
         }
         case 'SELECT_USER': {
             var selectedUser = state.users.filter(u => u.employeeNumber == action.payload).pop()
-            return {...state, fetching: true, selectedUser: selectedUser, isEditing: false};
+            return {...state, selectedUser: selectedUser, isEditing: false};
         }
         case 'EDIT_USER': {
-            return {...state, isEditing: true};
+            var selectedUser = state.users.filter(u => u.employeeNumber == action.payload).pop()
+            return {...state, selectedUser: selectedUser, isEditing: true};
         }
         case 'CANCEL_EDIT_USER': {
             return {...state, isEditing: false, selectedUser: null};

@@ -5,6 +5,13 @@ export default class UserEdit extends React.Component {
         this.state = props.user;
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSave = this.handleSave.bind(this);
+        console.log('test')
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.employeeNumber !== this.state.employeeNumber) {
+            this.setState(nextProps.user);
+        }
     }
 
     handleInputChange(event) {
@@ -24,7 +31,7 @@ export default class UserEdit extends React.Component {
 
     render() {
         return (
-            <form action="">
+            <form>
                 <input type="hidden" value={this.state.employeeNumber} id="employeeNumber" name="employeeNumber" />
                 <div className="form-group">
                     <label htmlFor="firstName"><strong>First Name:</strong></label>

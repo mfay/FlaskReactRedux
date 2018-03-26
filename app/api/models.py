@@ -1,5 +1,5 @@
 # coding: utf-8
-from sqlalchemy import Column, Date, ForeignKey, Integer, Numeric, SmallInteger, String, Text
+from sqlalchemy import Column, Date, DateTime, ForeignKey, Integer, Numeric, SmallInteger, String, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from api import db
@@ -23,6 +23,12 @@ class Customer(db.Model):
 
     employee = relationship(u'Employee')
 
+class Event(db.Model):
+    __tablename__ = 'events'
+
+    id = db.Column(Integer, primary_key=True)
+    startDate = db.Column(Date, nullable=False)
+    endDate = db.Column(Date, nullable=False)
 
 class Employee(db.Model):
     __tablename__ = 'employees'

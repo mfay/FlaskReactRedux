@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="jumbotron">
+        <h1>Flask, React, & Redux</h1>
+    </div>
+    <div id="root"></div>
+    <script src="{{ url_for('static', filename='js/events.js') }}"></script>
+
+    <!-- <form method="GET" action="/api/events">
+        <input type="text" name="title" id="name" />
+        <br/>
+        <input type="date" name="startDate" id="startDate">
+        <br/>
+        <input type="submit" value="Save"/>
+    </form> -->
+{% endblock %}
