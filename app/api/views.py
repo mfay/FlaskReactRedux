@@ -69,15 +69,19 @@ class EventList(Resource):
     def get(self):
         parser = reqparse.RequestParser()
         parser.add_argument('startDate', default='', help='Start date')
-        parser.add_argument('title', default='', help='Title')
+        parser.add_argument('title', default='Where is my title', help='Title')
         args = parser.parse_args()
+        print(args)
         event = Event()
         event.title = args.title
         event.startDate = parse(args.startDate)
         event.endDate = parse(args.startDate)
         db.session.add(event)
         db.session.commit()
-        return '[]'
+
+        all_events = Event.query.all()
+        event_schema = EventSchema(many=True)
+        return event_schema.jsonify(all_events)
         
 
     def get_args(self):

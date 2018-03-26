@@ -27,8 +27,9 @@ class Event(db.Model):
     __tablename__ = 'events'
 
     id = db.Column(Integer, primary_key=True)
+    title = db.Column(String(255), nullable=True)
     startDate = db.Column(Date, nullable=False)
-    endDate = db.Column(Date, nullable=False)
+    endDate = db.Column(Date, nullable=True)
 
 class Employee(db.Model):
     __tablename__ = 'employees'

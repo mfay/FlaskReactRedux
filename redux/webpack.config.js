@@ -11,7 +11,7 @@ const config = {
 		ignored: /node_modules/
 	},
 	entry: {
-		'game': path.join(src, 'index.jsx'),
+		'user': path.join(src, 'users/index.jsx'),
 		'events': path.join(src, 'calendar/index.jsx')
 	},
 	externals: {

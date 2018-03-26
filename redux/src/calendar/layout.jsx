@@ -5,18 +5,25 @@ import * as actions from './actions.jsx'
 class Layout extends React.Component {
     constructor(props) {
         super(props);
-        this.props.fetchEvents(4, 2018);
+        this.props.fetchEvents();
     }
     render() {
         return (
             <div>
                 <CalendarNav />
-                {this.props.events.length}
-                <br/>
-                <a href="#" onClick={this.props.fetchEvents}>Some</a>
+                <AgendaView events={this.props.events} />
             </div>
         );
     }
+}
+
+function AgendaView(props) {
+    const events = props.events.map(e => <li key={e.id}>{e.title} {e.startDate}</li>);
+    return (
+        <div>
+            {events}
+        </div>
+    );
 }
 
 function CalendarNav(props) {
